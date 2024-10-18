@@ -2,7 +2,7 @@
 import isEmpty from 'lodash/isEmpty'
 import cloneDeep from 'lodash/cloneDeep'
 
-export function getObjetosArea(objetos,bioma,x,y,raio,tamanhoMapaX, tamanhoMapaY){
+export function getObjetosArea(objetos,bioma,x,y,raio,tamanhoMapaX,tamanhoMapaY,personagem){
     let xInicial = x - raio
     let yInicial = y - raio
     let xFinal   = x + raio
@@ -46,18 +46,55 @@ export function getObjetosArea(objetos,bioma,x,y,raio,tamanhoMapaX, tamanhoMapaY
         }
     }
 
-    return {
-        posicaoJogador: {
-            x: x-xInicial,
-            y: y-yInicial
-        },
-        tamanho: {
-            x: xFinal - xInicial + 1,
-            y: yFinal - yInicial + 1
-        },
-        bioma: bioma,
-        objetos: novaAreaObjetos,
+    const matrizMapa = new Array()
+    const tamanho =  {
+        x: xFinal - xInicial,
+        y: yFinal - yInicial
     }
+    const posicaoJogador = {
+        x: x-xInicial,
+        y: y-yInicial
+    }
+
+    for (let y = 0; y <= tamanho.y; y++) {
+        matrizMapa.push(new Array())
+        for (let x = 0; x <= tamanho.x; x++) {
+            const listaDeObjetosNoBloco = new Array()
+            
+            let objeto = null
+            if (novaAreaObjetos[y] && novaAreaObjetos[y][x]){
+                objeto =  novaAreaObjetos[y][x]
+            }
+
+            if (posicaoJogador.y == y && posicaoJogador.x == x){  
+                if (objeto){
+                    if(objeto.includes("agua")){
+                        listaDeObjetosNoBloco.push(objeto.replace("agua","nadando"))
+                    } 
+                    else if (objeto.includes("arbusto") && !objeto.includes("verde")){
+                        listaDeObjetosNoBloco.push(objeto.replace("arbusto","arbusto_baixo")) 
+                    }
+                }
+
+                listaDeObjetosNoBloco.push(`${personagem.animal}_${personagem.direcao.horizontal}_${personagem.direcao.vertical}`)
+            }
+
+            if (objeto){
+                // grama
+                if (objeto.includes("arbusto_verde")) {
+                    listaDeObjetosNoBloco.unshift(objeto)
+                } else {
+                    listaDeObjetosNoBloco.push(objeto) 
+                }
+            }
+            
+            listaDeObjetosNoBloco.push(bioma) 
+
+            matrizMapa[y].push(listaDeObjetosNoBloco)
+        }
+    }
+
+    return matrizMapa
 }
 
 export function playerInteraje(event, personagem, salvaPersonagem, bioma, objetos, salvaObjetos,tamanhoMapaX, tamanhoMapaY){
@@ -176,4 +213,14 @@ export function playerInteraje(event, personagem, salvaPersonagem, bioma, objeto
     }
 
     salvaPersonagem(alterandoPersonagem)
+}
+
+
+export function jsonParaString(json){
+    let mensagemObjetos = "{\n"
+    for (const chave in json) {
+        mensagemObjetos += `    ${chave}: ${JSON.stringify(json[chave])},\n`
+    }
+    mensagemObjetos += "}"
+    return mensagemObjetos
 }

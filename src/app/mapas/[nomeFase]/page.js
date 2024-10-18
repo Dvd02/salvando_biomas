@@ -1,6 +1,6 @@
 'use client'
 
-import { playerInteraje, getObjetosArea} from "./utils"
+import { playerInteraje, getObjetosArea, jsonParaString} from "./utils"
 import { fases } from "@/utils/dados"
 
 import { useEffect, useState } from "react"
@@ -10,84 +10,26 @@ import Link from "next/link"
 import Console from "../../../componentes/Console"
 import "./styles.css"
 
-function jsonParaString(json){
-    let mensagemObjetos = "{\n"
-    for (const chave in json) {
-        mensagemObjetos += `    ${chave}: ${JSON.stringify(json[chave])},\n`
-    }
-    mensagemObjetos += "}"
-    return mensagemObjetos
-}
 
-function RenderizaArea({dados: {bioma, tamanho, objetos, posicaoJogador}, personagem }){
-    
-    const area = new Array(tamanho.y).fill().map(() => new Array(tamanho.x).fill(""));
-
+function RenderizaArea({area}){
     return (<>
         <div className={"tabuleiro"}>
-            {area.map((linha, i)=>{
-                return (    
-                    <div className={"linha"} key={`Linha:${i}`}>
-                        {linha.map((bloco, ii)=>{
-                            let elementosNaCelula = ''
-                            let objeto = null
+            {area.map((linha, y) => (
+                <div className={"linha"} key={`Linha:${y}`}>
+                    {linha.map((listaDeObjetosNoBloco, x) => {
+                        const urls = listaDeObjetosNoBloco.map(objeto => `url('/tiles/${objeto}.png')`).join(', ');
 
-                            if (objetos[i] && objetos[i][ii]){
-                                objeto =  objetos[i][ii]
-                            }
-
-                            if (posicaoJogador.y == String(i) && posicaoJogador.x == String(ii)){  
-                                if (objeto){
-                                    if(objeto.includes("agua")){
-                                        elementosNaCelula = `url('/tiles/${objeto.replace("agua","nadando")}.png'), `
-                                    } 
-                                    else if (objeto.includes("arbusto") && !objeto.includes("verde")){
-                                        elementosNaCelula = `url('/tiles/${objeto.replace("arbusto","arbusto_baixo")}.png'), `  
-                                    }
-                                }
-
-                                elementosNaCelula += `url('/tiles/${personagem.animal}_${personagem.direcao.horizontal}_${personagem.direcao.vertical}.png'), `
-                            }
-
-                            if (objeto){
-                                // grama
-                                if (objeto.includes("arbusto_verde")) {
-                                    elementosNaCelula = `url(/tiles/${objeto}.png), ` + elementosNaCelula
-                                } else {
-                                    elementosNaCelula += `url('/tiles/${objeto}.png'), `
-                                }
-                            }
-
-                            elementosNaCelula += `url('/tiles/${bioma}.png')`
-
-                            return (<>
-                                <div
-                                    className={"celula"} 
-                                    key={`Linha:${i};Coluna:${ii}`}
-                                    style={{
-                                        backgroundImage: elementosNaCelula,
-                                        backgroundSize: 'cover',    
-                                        backgroundRepeat: 'no-repeat', 
-                                    }}
-                                />
-                            </>)
-                        })}
-                    </div>
-                )
-            })}
+                        return (
+                            <div
+                                className={"celula"} 
+                                key={`Linha:${y};Coluna:${x}`}
+                                style={{ backgroundImage: urls }}
+                            />
+                        );
+                    })}
+                </div>
+            ))}
         </div>
-
-        {/* <Console titulo="dados da area">
-            bioma: {bioma}
-            {"\n\n"}
-            tamanho: {JSON.stringify(tamanho,null,4)}
-            {"\n\n"}
-            posicaoJogador: {JSON.stringify(posicaoJogador,null,4)}
-            {"\n\n"}
-            objetos: {jsonParaString(objetos)}
-            {"\n\n"}
-            area: {jsonParaString(area)}
-        </Console> */}
     </>)
 }
 
@@ -118,12 +60,12 @@ export default function Mapa({ params : { nomeFase } }){
     }
 
     const ligaControles = () => {
-        document.addEventListener("keyup", teclaPresionada)
+        document.addEventListener("keydown", teclaPresionada)
         setControlesAtivos(true)
     }
     
     const desligaControles = () => {
-        document.removeEventListener("keyup", teclaPresionada)
+        document.removeEventListener("keydown", teclaPresionada)
         setControlesAtivos(false)
     }
 
@@ -142,7 +84,7 @@ export default function Mapa({ params : { nomeFase } }){
             }
         // },300)
 
-        return ()=>{
+        return ()=>{    
             desligaControles()
         }
     },[personagem])
@@ -150,7 +92,7 @@ export default function Mapa({ params : { nomeFase } }){
     return(<>
         <div className={"jogo"}>
             <RenderizaArea 
-                dados={
+                area={
                     getObjetosArea(
                         objetos, 
                         fase.bioma, 
@@ -159,9 +101,9 @@ export default function Mapa({ params : { nomeFase } }){
                         raioAreaDeVisao, 
                         fase.tamanho.x, 
                         fase.tamanho.y,
+                        personagem
                     )
                 }
-                personagem={personagem}
             />
 
             <div className="dados">
@@ -169,6 +111,7 @@ export default function Mapa({ params : { nomeFase } }){
                     <div className="icone" style={{backgroundImage: "url('/tiles/agua_gota.png')"}} /> 
                     : {personagem.quantidade.agua}
                 </div>
+
                 <div className="textoDados">
                     <div className="icone" style={{backgroundImage: `url('/tiles/semente.png')`}} /> 
                     : {personagem.quantidade.semente}
