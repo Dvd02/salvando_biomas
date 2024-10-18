@@ -1,0 +1,7 @@
+lodash
+fs-extra
+
+npm list --depth=0
+
+comando para atualizar o tileset:
+    node ./src/bin/gerarTiles.js
