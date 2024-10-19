@@ -94,6 +94,14 @@ export function getObjetosArea(objetos,bioma,x,y,raio,tamanhoMapaX,tamanhoMapaY,
         }
     }
 
+    const miraResultante = {
+        x: posicaoJogador.x + personagem.posicao_mira.x,
+        y: posicaoJogador.y + personagem.posicao_mira.y
+    }
+    if (matrizMapa[miraResultante.y] && matrizMapa[miraResultante.y][miraResultante.x]){
+        matrizMapa[miraResultante.y][miraResultante.x].unshift("mira")
+    }
+
     return matrizMapa
 }
 
@@ -109,21 +117,29 @@ export function playerInteraje(event, personagem, salvaPersonagem, bioma, objeto
     }
 
     switch (interacao) {
-        case "W", "ARROWUP":
+        case "W":
+        case "ARROWUP":
             novaPosicaoY -= 1
             alterandoPersonagem.direcao.vertical = "cima"
+            alterandoPersonagem.posicao_mira = {"x":0, "y":-1}
             break
-        case "A", "ARROWLEFT":
+        case "A": 
+        case "ARROWLEFT":
             novaPosicaoX -= 1
             alterandoPersonagem.direcao.horizontal = "esquerda"
+            alterandoPersonagem.posicao_mira = {"x":-1, "y":0}
             break
-        case "S", "ARROWDOWN":
+        case "S":
+        case "ARROWDOWN":
             novaPosicaoY += 1
             alterandoPersonagem.direcao.vertical = "baixo"
+            alterandoPersonagem.posicao_mira = {"x":0, "y":1}
             break
-        case "D", "ARROWRIGHT":
+        case "D":
+        case "ARROWRIGHT":
             novaPosicaoX += 1
             alterandoPersonagem.direcao.horizontal = "direita"
+            alterandoPersonagem.posicao_mira = {"x":1, "y":0}
             break
         case " ":
             break
@@ -149,62 +165,67 @@ export function playerInteraje(event, personagem, salvaPersonagem, bioma, objeto
         alterandoPersonagem.posicao.x = novaPosicaoX
         alterandoPersonagem.posicao.y = novaPosicaoY
     }   
-    
+
+    const miraResultante = {
+        x: novaPosicaoX + personagem.posicao_mira.x,
+        y: novaPosicaoY + personagem.posicao_mira.y
+    }
     if (
-        (alterandoPersonagem.quantidade.agua <= 9) && 
-        (alterandoPersonagem.coleta.includes("agua")) && 
-        (objetoResultante.includes("agua")) &&
-        (
-            !alterandoPersonagem.anda.includes("agua") || 
-            alterandoPersonagem.anda.includes("agua") && interacao == " " 
-        )
+        interacao == " " &&
+        (0 <= miraResultante.x && miraResultante.x <= tamanhoMapaX-1) && 
+        (0 <= miraResultante.y && miraResultante.y <= tamanhoMapaY-1)
+    ){
+        objetoResultante = bioma
+        if (objetos[miraResultante.y] && objetos[miraResultante.y][miraResultante.x]){
+            objetoResultante = objetos[miraResultante.y][miraResultante.x]
+        }
         
-    ){
-        alterandoPersonagem.quantidade.agua += 1
-    }
+        if (
+            (alterandoPersonagem.quantidade.agua <= 9) && 
+            (alterandoPersonagem.coleta.includes("agua")) && 
+            (objetoResultante.includes("agua"))
+        ){
+            alterandoPersonagem.quantidade.agua += 1
+        }
+        
+        if (
+            (alterandoPersonagem.quantidade.semente <= 9) && 
+            (alterandoPersonagem.coleta.includes("semente")) && 
+            (objetoResultante.includes("folha") || objetoResultante.includes("tronco"))
+        ){
+            alterandoPersonagem.quantidade.semente += 1
+        }
 
-    if (
-        (alterandoPersonagem.quantidade.semente <= 9) && 
-        (alterandoPersonagem.coleta.includes("semente")) && 
-        (objetoResultante.includes("folha") || objetoResultante.includes("tronco")) &&
-        (
-            !alterandoPersonagem.anda.includes("arvore") || 
-            alterandoPersonagem.anda.includes("arvore") && interacao == " " 
-        )  
-    ){
-        alterandoPersonagem.quantidade.semente += 1
-    }
-
-    if (
-        (objetoResultante.includes("fogo")) && 
-        (alterandoPersonagem.quantidade.agua >= 1)
-    ){
-        const alterandoObjetos = cloneDeep(objetos)
-        if(alterandoObjetos[novaPosicaoY] && alterandoObjetos[novaPosicaoY][novaPosicaoX]){
-            delete alterandoObjetos[novaPosicaoY][novaPosicaoX]
-            if (isEmpty(alterandoObjetos[novaPosicaoY])){
-                delete alterandoObjetos[novaPosicaoY]
+        if (
+            (objetoResultante.includes("fogo")) && 
+            (alterandoPersonagem.quantidade.agua >= 1)
+        ){
+            const alterandoObjetos = cloneDeep(objetos)
+            if(alterandoObjetos[miraResultante.y] && alterandoObjetos[miraResultante.y][miraResultante.x]){
+                delete alterandoObjetos[miraResultante.y][miraResultante.x]
+                if (isEmpty(alterandoObjetos[miraResultante.y])){
+                    delete alterandoObjetos[miraResultante.y]
+                }
+                salvaObjetos(alterandoObjetos)
+                alterandoPersonagem.quantidade.agua -= 1
+                alterandoPersonagem.quantidade.fogoApagado += 1
             }
-            salvaObjetos(alterandoObjetos)
-            alterandoPersonagem.quantidade.agua -= 1
-            alterandoPersonagem.quantidade.fogoApagado += 1
         }
-    }
-
-    if (
-        (interacao == " ") &&
-        (objetoResultante.includes("chao") || objetoResultante.includes("arbusto")) &&
-        (alterandoPersonagem.quantidade.semente >= 1)
-    ){
-        const alterandoObjetos= cloneDeep(objetos)
-        if (isEmpty(alterandoObjetos[novaPosicaoY])){
-            alterandoObjetos[novaPosicaoY] = {}
-        }
-        alterandoObjetos[novaPosicaoY][novaPosicaoX] = `muda_${bioma.replace("chao_","")}`
-        salvaObjetos(alterandoObjetos)
         
-        alterandoPersonagem.quantidade.semente -= 1
-        alterandoPersonagem.quantidade.plantada += 1
+        if (
+            (objetoResultante.includes("chao") || objetoResultante.includes("arbusto")) &&
+            (alterandoPersonagem.quantidade.semente >= 1)
+        ){
+            const alterandoObjetos= cloneDeep(objetos)
+            if (isEmpty(alterandoObjetos[miraResultante.y])){
+                alterandoObjetos[miraResultante.y] = {}
+            }
+            alterandoObjetos[miraResultante.y][miraResultante.x] = `muda_${bioma.replace("chao_","")}`
+            salvaObjetos(alterandoObjetos)
+            
+            alterandoPersonagem.quantidade.semente -= 1
+            alterandoPersonagem.quantidade.plantada += 1
+        }
     }
 
     if (alterandoPersonagem.quantidade.fogoApagado >= alterandoPersonagem.meta.fogoApagado && 

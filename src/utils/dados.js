@@ -65,6 +65,10 @@ const animalBase = {
         "vertical": "baixo", //cima
         "horizontal": "direita" //esquerda
     },
+    "posicao_mira": {
+        "x": 1,
+        "y": 0
+    },
     "posicao": {
         "x": 0,
         "y": 0
@@ -96,6 +100,10 @@ const tamandua = {
     "direcao": {
         "vertical": "baixo", //cima
         "horizontal": "direita" //esquerda
+    },
+    "posicao_mira": {
+        "x": 1,
+        "y": 0
     },
     "posicao": {
         "x": 7,
@@ -170,6 +178,10 @@ const lobo = {
         "vertical": "baixo", //cima
         "horizontal": "direita" //esquerda
     },
+    "posicao_mira": {
+        "x": 1,
+        "y": 0
+    },
     "posicao": {
         "x": 19,
         "y": 8
@@ -238,9 +250,13 @@ const capivara = {
         "vertical": "baixo", //cima
         "horizontal": "direita" //esquerda
     },
+    "posicao_mira": {
+        "x": 1,
+        "y": 0
+    },
     "posicao": {
         "x": 21,
-        "y": 15
+        "y": 16
     },
     "quantidade": {
         "agua": 0,
@@ -314,6 +330,10 @@ const macaco = {
     "direcao": {
         "vertical": "baixo", //cima
         "horizontal": "direita" //esquerda
+    },
+    "posicao_mira": {
+        "x": 1,
+        "y": 0
     },
     "posicao": {
         "x": 31,
