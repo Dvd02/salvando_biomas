@@ -34,17 +34,17 @@ export default function Sobre() {
                 </p>
 
                 <h2 style={styles.integrantesTitle}>Equipe do Projeto</h2>
-                <p style={styles.integrantesText}>David Luiz Vinhal</p>
-                <p style={styles.integrantesText}>Esther Rose Italiano</p>
+                <p style={styles.integrantesText}>David Vinhal</p>
+                <p style={styles.integrantesText}>Esther Rose</p>
                 <p style={styles.integrantesText}>João Marcos</p>
                 <p style={styles.integrantesText}>Marcos Piedade</p>
 
-                {/* <h3 style={styles.agradecimentosTitle}>Agradecimentos Especiais</h3>
+                <h3 style={styles.agradecimentosTitle}>Agradecimentos Especiais</h3>
                 <p style={styles.text}>
-                    Agradecemos especialmente a Gabriel Francisco Vaz pela sua valiosa contribuição com as artes e conceitos durante o desenvolvimento do projeto.
-                </p> */}
+                    Agradecemos especialmente a Gabriel Francisco pela sua valiosa contribuição com as artes e conceitos durante o desenvolvimento do projeto.
+                </p>
 
-                <Link style={styles.backButton} href="/">
+                <Link onClick={()=>{setCareegando(true)}} style={styles.backButton} href="/">
                     Voltar para o Início
                 </Link>
             </div>
