@@ -21,7 +21,7 @@ const nomeDosTiles = [
     ["lobo_direita_baixo" ,"capivara_direita_baixo" ,"tamandua_direita_baixo" ,"macaco_direita_baixo" ,"agua_gota"],
     ["lobo_direita_cima"  ,"capivara_direita_cima"  ,"tamandua_direita_cima"  ,"macaco_direita_cima"  ,"apaga_fogo"],
     ["lobo_esquerda_baixo","capivara_esquerda_baixo","tamandua_esquerda_baixo","macaco_esquerda_baixo","semente"],
-    ["lobo_esquerda_cima" ,"capivara_esquerda_cima" ,"tamandua_esquerda_cima" ,"macaco_esquerda_cima" ,"planta_semente"],
+    ["lobo_esquerda_cima" ,"capivara_esquerda_cima" ,"tamandua_esquerda_cima" ,"macaco_esquerda_cima" ,"mira"],
 ]
 
 // nomenclartura dos blocos
