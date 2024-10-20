@@ -55,8 +55,9 @@ export default function Sobre() {
                     fontFamily: '"pixelStyle", cursive',
                     border: "3px solid black",
                     position: "absolute",
-                    right: "10px",
-                    bottom: "10px",
+                    right: "50%",
+                    top: "10px",
+                    transform: " translateX(50%)",
                     padding: "10px",
                     backgroundColor: 'white',
                     borderRadius: "5px"

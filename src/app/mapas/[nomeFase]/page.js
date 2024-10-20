@@ -44,9 +44,10 @@ export default function Mapa({ params : { nomeFase } }){
     const [personagem, setPersonagem] = useState(fase.animal)
     const [objetos, setObjetos] = useState(fase.objetos)
     const [dialogo, setDialogo] = useState(fase.animal.dialogo[0])
+
     const [controlesAtivos, setControlesAtivos] = useState(false)
     const [carregando, setCarregando] = useState(false)
-    const [controles, setControles] = useState(true)
+    const [controles, setControles] = useState(false)
 
     const teclaPresionada = (e)=>{
         playerInteraje(e,
@@ -77,9 +78,7 @@ export default function Mapa({ params : { nomeFase } }){
         } else if (personagem.estadoDoJogo == "perdeu"){
             setDialogo(personagem.dialogo[2])
             setControlesAtivos(false)
-        }
-
-        if (controlesAtivos){
+        } else if (controlesAtivos){
             ligaControles()
         }
 
@@ -209,8 +208,9 @@ export default function Mapa({ params : { nomeFase } }){
                 fontFamily: '"pixelStyle", cursive',
                 border: "3px solid black",
                 position: "absolute",
-                right: "10px",
-                bottom: "10px",
+                right: "50%",
+                top: "10px",
+                transform: " translateX(50%)",
                 padding: "10px",
                 backgroundColor: 'white',
                 borderRadius: "5px"
