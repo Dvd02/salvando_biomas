@@ -46,6 +46,7 @@ export default function Mapa({ params : { nomeFase } }){
     const [dialogo, setDialogo] = useState(fase.animal.dialogo[0])
     const [controlesAtivos, setControlesAtivos] = useState(false)
     const [carregando, setCarregando] = useState(false)
+    const [controles, setControles] = useState(true)
 
     const teclaPresionada = (e)=>{
         playerInteraje(e,
@@ -78,11 +79,9 @@ export default function Mapa({ params : { nomeFase } }){
             setControlesAtivos(false)
         }
 
-        // setTimeout(()=>{
-            if (controlesAtivos){
-                ligaControles()
-            }
-        // },300)
+        if (controlesAtivos){
+            ligaControles()
+        }
 
         return ()=>{    
             desligaControles()
@@ -150,6 +149,61 @@ export default function Mapa({ params : { nomeFase } }){
             Voltar
         </Link>
         
+        
+        <div onClick={()=>{setControles(true)}} style={{
+            fontFamily: '"pixelStyle", cursive',
+            border: "3px solid black",
+            position: "absolute",
+            right: "10px",
+            top: "10px",
+            padding: "10px",
+            backgroundColor: 'white',
+            borderRadius: "5px"
+        }}>
+            Controles
+        </div>
+        
+        {controles &&
+            <div 
+                style={{
+                    fontFamily: '"pixelStyle", cursive',
+                    border: "3px solid black",
+                    position: "absolute",
+                    right: "10px",
+                    top: "10px",
+                    padding: "10px",
+                    backgroundColor: 'white',
+                    borderRadius: "5px",
+                }}
+            >
+                <div
+                    onClick={()=>{setControles(false)}}
+                    style={{
+                        fontFamily: '"pixelStyle", cursive',
+                        border: "3px solid black",
+                        position: "absolute",
+                        right: "5px",
+                        top: "5px",
+                        height: "calc(1.5em)",
+                        aspectRatio: 1,
+                        textAlign: "center",
+                        backgroundColor: 'white',
+                        borderRadius: "50%",
+                    }}
+                >
+                    X
+                </div>
+                WASD ou SETAS para andar <br/>
+                ESPAÇO para interagir com o mapa <br/><br/>
+                ---------------[ INTERAÇÕES ]------------ <br/>
+                Arvore: coleta sementes                   <br/>
+                Chamas: com agua se apaga                 <br/>
+                Agua: coleta agua                         <br/>
+                Chao: com sementes se planta mudas        <br/>
+                ----------------------------------------- 
+            </div>
+        }
+
         {carregando &&
             <div style={{
                 fontFamily: '"pixelStyle", cursive',
