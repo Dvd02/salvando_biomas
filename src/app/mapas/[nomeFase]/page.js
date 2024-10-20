@@ -192,14 +192,19 @@ export default function Mapa({ params : { nomeFase } }){
                 >
                     X
                 </div>
-                WASD ou SETAS para andar <br/>
-                ESPAÇO para interagir com o mapa <br/><br/>
-                ---------------[ INTERAÇÕES ]------------ <br/>
-                Arvore: coleta sementes                   <br/>
-                Chamas: com agua se apaga                 <br/>
-                Agua: coleta agua                         <br/>
-                Chao: com sementes se planta mudas        <br/>
-                ----------------------------------------- 
+
+                WASD ou SETAS para andar
+                {personagem.anda.includes("agua") && <> e nadar nas<br/>aguas</>}
+                {personagem.anda.includes("arvore") && <> e escalar<br/>as arvores</>}
+                .<br/>
+
+                ESPAÇO para interagir com o mapa. <br/><br/>
+                —————————[ INTERAÇÕES ]————————— <br/>
+                • Arvore: coleta sementes.                   <br/>
+                • Chamas: com agua se apaga.                 <br/>
+                • Agua: coleta agua.                         <br/>
+                • Chao: com sementes se planta mudas.        <br/>
+                ————————————————————————————— 
             </div>
         }
 
