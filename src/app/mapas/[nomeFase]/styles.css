@@ -99,19 +99,24 @@
     background-color: white;
     padding: 5px;
     border-radius: 10px;
+    margin-bottom: 10px;
+    width: 500px;
+}
+.linhaDados {
     display: flex;
-    justify-content: space-around;
-    width: 400px;
+    justify-content: space-between;
 }
 .textoDados {
     font-family: pixelStyle, cursive;
-    font-size: 2em;
+    white-space: pre;
+    min-width: 9em; 
 }
 .icone {
     display: inline-block;
     background-size: cover;
     height: 0.8em;
     aspect-ratio: 1;
+    margin-right: 5px;
 }
 
 

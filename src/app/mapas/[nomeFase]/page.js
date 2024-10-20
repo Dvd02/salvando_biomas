@@ -107,24 +107,28 @@ export default function Mapa({ params : { nomeFase } }){
             />
 
             <div className="dados">
-                <div className="textoDados">
-                    <div className="icone" style={{backgroundImage: "url('/tiles/agua_gota.png')"}} /> 
-                    : {personagem.quantidade.agua}
-                </div>
+                <div className="linhaDados">
+                    <div className="textoDados">
+                        <div className="icone" style={{backgroundImage: `url('/tiles/semente.png')`}} /> 
+                        Sementes disponiveis : {String(personagem.quantidade.semente).padStart(2,"0")}
+                    </div>
 
-                <div className="textoDados">
-                    <div className="icone" style={{backgroundImage: `url('/tiles/semente.png')`}} /> 
-                    : {personagem.quantidade.semente}
+                    <div className="textoDados">
+                        <div className="icone" style={{backgroundImage: "url('/tiles/agua_gota.png')"}} /> 
+                        Agua     : {String(personagem.quantidade.agua).padStart(2,"0")}
+                    </div>
                 </div>
                 
-                <div className="textoDados">
-                    <div className="icone" style={{backgroundImage: `url('/tiles/semente.png'), url('/tiles/${fase.bioma}.png')`}} /> 
-                    : {Math.max(personagem.meta.plantada - personagem.quantidade.plantada, 0)}
-                </div>
+                <div className="linhaDados">
+                    <div className="textoDados">
+                        <div className="icone" style={{backgroundImage: `url('/tiles/semente.png'), url('/tiles/${fase.bioma}.png')`}} /> 
+                        Sementes a plantar     : {String(Math.max(personagem.meta.plantada - personagem.quantidade.plantada, 0)).padStart(2,"0")}
+                    </div>
 
-                <div className="textoDados">
-                    <div className="icone" style={{backgroundImage: `url('/tiles/apaga_fogo.png')`}} /> 
-                    : {Math.max( personagem.meta.fogoApagado - personagem.quantidade.fogoApagado, 0)}
+                    <div className="textoDados">
+                        <div className="icone" style={{backgroundImage: `url('/tiles/fogo.png')`}} /> 
+                        Chamas : {String(Math.max( personagem.meta.fogoApagado - personagem.quantidade.fogoApagado, 0)).padStart(2,"0")}
+                    </div>
                 </div>
             </div>
         </div>
